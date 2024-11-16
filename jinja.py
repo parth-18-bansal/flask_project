@@ -19,9 +19,18 @@ def about_page():
     return render_template("about.html")
 
 #variable rule
-@app.route("/success/<score>")
+@app.route("/success/<int:score>")
 def success(score):
-    return "The mark is "+ score
+    result = ""
+    if score>50:
+        result = "PASS"
+
+    else:
+        result = "FAIL"
+
+    # here we are passing the value( result is like a data source to the html page)
+    return render_template('result.html',results=result)
+
 
 if __name__ == "__main__":
     app.run(debug=True)
