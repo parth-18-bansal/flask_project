@@ -1,4 +1,11 @@
-from flask import Flask,render_template,request
+from flask import Flask,render_template,request,redirect,url_for
+
+'''
+{{  }} expressions to print output in html
+{%...%} conditions, for loops
+{#...#} this is for comments
+
+'''
 
 
 #wsgi application
@@ -30,6 +37,36 @@ def success(score):
 
     # here we are passing the value( result is like a data source to the html page)
     return render_template('result.html',results=result)
+
+@app.route("/successres/<int:score>")
+def successres(score):
+    result = ""
+    if score>50:
+        result = "PASS"
+
+    else:
+        result = "FAIL"
+
+    expression = {'score':score,"result":result}
+
+    # here we are passing the value( result is like a data source to the html page)
+    return render_template('result1.html',results=expression)
+
+# dynamic url
+@app.route('/submit', methods=['POST', 'GET'])
+def submit():
+    total_score = 0
+    if request.method == 'POST':
+        science = float(request.form['science'])
+        maths = float(request.form['maths'])
+        c = float(request.form['c'])
+        data_science = float(request.form['datascience'])
+        
+        total_score = (science + maths + c + data_science) / 4
+
+    else: 
+        return render_template('getresult.html')
+    return redirect(url_for('successres', score=total_score))
 
 
 if __name__ == "__main__":
